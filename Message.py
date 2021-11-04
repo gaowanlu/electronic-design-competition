@@ -1,6 +1,6 @@
 #************************************ (C) COPYRIGHT 2019 ANO ***********************************#
 from pyb import UART #导入UART串口
-uart = UART(3,9600)#初始化串口 UART3波特率 500000
+uart = UART(3,500000)#初始化串口 UART3波特率 500000
 
 class Receive(object):
     uart_buf = []
@@ -16,12 +16,14 @@ class Ctrl(object):
     WorkMode = 1   #工作模式
     IsDebug = 1     #不为调试状态时关闭某些图形显示等，有利于提高运行速度
     T_ms = 0   #每秒有多少帧
+
 #类的实例化
 Ctr=Ctrl()
 
 
 #串口发送数据
 def UartSendData(Data):
+    print("write data",Data[0],Data[1],Data[2],Data[3],Data[4],Data[5],Data[6])
     uart.write(Data)
 
 #串口数据解析
@@ -55,24 +57,28 @@ def ReceivePrepare(data):
             R.state = 1
         else:
             R.state = 0
+            R.uart_buf=[]
     elif R.state==1:
         if data == 0xAF:
             R.uart_buf.append(data)
             R.state = 2
         else:
             R.state = 0
+            R.uart_buf=[]
     elif R.state==2:
         if data == 0x05:
             R.uart_buf.append(data)
             R.state = 3
         else:
             R.state = 0
+            R.uart_buf=[]
     elif R.state==3:
         if data == 0x01:#功能字
             R.state = 4
             R.uart_buf.append(data)
         else:
             R.state = 0
+            R.uart_buf=[]
     elif R.state==4:
         if data == 0x06:#数据个数
             R.state = 5
@@ -80,12 +86,14 @@ def ReceivePrepare(data):
             R._data_len = data
         else:
             R.state = 0
+            R.uart_buf=[]
     elif R.state==5:
         if data==1 or data==2 or data==3 or data==4:
             R.uart_buf.append(data)
             R.state = 6
         else:
             R.state = 0
+            R.uart_buf=[]
     elif R.state==6:
         R.state = 0
         R.uart_buf.append(data)#
@@ -93,6 +101,7 @@ def ReceivePrepare(data):
         R.uart_buf=[]#清空缓冲区，准备下次接收数据
     else:
         R.state = 0
+        R.uart_buf=[]
 
 
 
@@ -113,12 +122,12 @@ def UartReadBuffer():
 #-----------------------------------通信协议::打包帧----------------------------------------#
 
 #点检测数据打包
-def DotDataPack(color,flag,x,y,T_ms):
+def DotDataPack(color,flag,x,y,T_ms,mode_flag):
     if(flag==1):
         print("found: x=",x,"  y=",-y)
-    pack_data=bytearray([0xAA,0x29,0x05,0x43,0x00,color,flag,x>>8,x,(-y)>>8,(-y),T_ms,0x00])
+    pack_data=bytearray([0xAA,0x29,0x05,mode_flag,0x00,color,flag,x>>8,x,(-y)>>8,(-y),T_ms,0x00])
     lens = len(pack_data)#数据包大小
-    pack_data[4] = lens-6;#有效数据个数
+    pack_data[4] = 7;#有效数据个数
     i = 0
     sum = 0
     #和校验

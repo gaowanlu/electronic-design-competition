@@ -1,7 +1,7 @@
 import utils
 import Message
 
-startPoint_threshold =(0, 40, -21, 23, -20, 21)
+startPoint_threshold =(0, 21, -17, 15, -31, 13)
 CROSS_MIN=10
 CROSS_MAX=90
 
@@ -92,7 +92,7 @@ def find_cirlce_method(img):
 '''发包'''
 def sendMessage():
     #color,flag,x,y,T_ms
-    pack=Message.DotDataPack(0,STARTDOT.flag,STARTDOT.x,STARTDOT.y,Message.Ctr.T_ms)
+    pack=Message.DotDataPack(0,STARTDOT.flag,STARTDOT.x,STARTDOT.y,Message.Ctr.T_ms,0x43)
     Message.UartSendData(pack)
     STARTDOT.flag=0#重置标志位
 

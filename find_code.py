@@ -14,8 +14,6 @@ import sensor, image, time, math
 # 条形码检测需要更高的分辨率才能正常工作，因此应始终以640x480的灰度运行。
 
 def barcode_name(code):
-    if(code.type() == image.CODE128):
-        return "CODE128"
     if(code.type() == image.EAN2):
         return "EAN2"
     if(code.type() == image.EAN5):
@@ -46,6 +44,8 @@ def barcode_name(code):
         return "PDF417"
     if(code.type() == image.CODE93):
         return "CODE93"
+    if(code.type() == image.CODE128):
+        return "CODE128"
 
 def find_code(img):
     codes = img.find_barcodes()

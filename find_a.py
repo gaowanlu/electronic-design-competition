@@ -3,7 +3,7 @@ from pyb import LED,Timer
 import math
 import Message
 Green_threshold=(40, 82, -11, 6, -11, 24)
-A_threshold=(0, 24, -15, 12, -6, 10)
+A_threshold=(0, 21, -23, 10, -19, 25)
 class ADot(object):
     flag = 0
     color = 0
@@ -33,8 +33,8 @@ def find_A_blob(img):
         rate=short_side/long_side
         #print("A",width,height,rate)
         sub=math.fabs(0.956-rate)
-        side_limit=short_side>10 and short_side<28
-        side_limit=side_limit and long_side>17 and long_side<28#and side_limit
+        side_limit=short_side>10 and short_side<68
+        side_limit=side_limit and long_side>17 and long_side<68#and side_limit
         #if(sub<last_sub and side_limit and find_AShape(img,blob)):
         if(side_limit):
             #last_sub=sub
@@ -89,7 +89,7 @@ def find_AShape(img,blob):
 '''发包'''
 def sendMessage():
     #color,flag,x,y,T_ms
-    pack=Message.DotDataPack(0,ADOT.flag,ADOT.x,ADOT.y,Message.Ctr.T_ms)
+    pack=Message.DotDataPack(0,ADOT.flag,ADOT.x,ADOT.y,Message.Ctr.T_ms,0x44)
     Message.UartSendData(pack)
     ADOT.flag=0#重置标志位
 
