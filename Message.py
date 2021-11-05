@@ -12,7 +12,7 @@ R=Receive() #接收数据缓存对象
 # WorkMode=1为寻点模式
 # WorkMode=2为寻线模式 包括直线 转角
 class Ctrl(object):
-    WorkMode = 1   #工作模式
+    WorkMode = 0   #工作模式
     IsDebug = 1     #不为调试状态时关闭某些图形显示等，有利于提高运行速度
     T_ms = 0   #每秒有多少帧
 
@@ -146,7 +146,7 @@ def LineDataPack(flag,angle,distance,crossflag,crossx,crossy,T_ms):
         print("found: angle",angle,"  distance=",distance,"   线状态   左转")
     elif (flag == 3):
         print("found: angle",angle,"  distance=",distance,"   线状态   右转")
-
+    print("Send Data: ","flag: ",flag,"angle",angle,"dis: ",distance,"cross_flag: ",crossflag,"crossx ",crossx,"crossy ",crossy);
     line_data=bytearray([0xAA,0x29,0x05,0x42,0x00,flag,angle>>8,angle,distance>>8,distance,crossflag,crossx>>8,crossx,(-crossy)>>8,(-crossy),T_ms,0x00])
     lens = len(line_data)#数据包大小
     line_data[4] = 11;#有效数据个数

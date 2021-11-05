@@ -51,20 +51,39 @@ while(True):
     clock.tick()
     #读取串口数据更新接收体
     Message.UartReadBuffer()
-    img = sensor.snapshot()#拍一张图像
-    find_line.LineCheck(img)
+    Message.Ctr.WorkMode=6
+    if(Message.Ctr.WorkMode==0):
+        continue
+
+
+    #line =img.get_regression([(40, 82, -11, 6, -11, 24)],x_stride=2,y_stride=2,pixels_threshold=10,robust = True)
+    #if (line): img.draw_line(line.line(), color = 127)
+    #sensor.set_windowing((40,30,80,60))
+    #find_line.find_line()
+    #find_start_point.find_start_point_blob(img)
+    #find_a.find_A_blob(img)
+    #sensor.set_windowing((40,30,80,60))
+    #find_line.find_line()
     #print("MODE",Message.Ctr.WorkMode)
-    #if(Message.Ctr.WorkMode==3):
-        #find_start_point.find_start_point_blob(img)
-    #elif(Message.Ctr.WorkMode==4):
-        #find_a.find_A_blob(img)
-    ##find_pole.find_pole(img)
-    ##find_code.find_code(img)
-    ##find_start_point.find_cirlce_method(img)
-    #print("fps: ",clock.fps())
-    #if Message.Ctr.IsDebug == 0:
-        #fps=int(clock.fps())
-        #Message.Ctr.T_ms = (int)(1000/fps)#1s内的帧数
+
+
+    if(Message.Ctr.WorkMode==3):
+        sensor.set_windowing((0,0,utils.IMG_WIDTH,utils.IMG_HEIGHT))
+        img = sensor.snapshot()#拍一张图像
+        find_start_point.find_start_point_blob(img)
+    elif(Message.Ctr.WorkMode==4):
+        sensor.set_windowing((0,0,utils.IMG_WIDTH,utils.IMG_HEIGHT))
+        img = sensor.snapshot()#拍一张图像
+        find_a.find_A_blob(img)
+    elif(Message.Ctr.WorkMode==2):
+        sensor.set_windowing((40,30,80,60))
+        find_line.find_line()
+    elif(Message.Ctr.WorkMode==6):
+        find_pole.check_pole()
+    print("fps: ",clock.fps())
+    if Message.Ctr.IsDebug == 0:
+        fps=int(clock.fps())
+        Message.Ctr.T_ms = (int)(1000/fps)#1s内的帧数
 
 
 
