@@ -66,18 +66,13 @@ while(True):
     #find_line.find_line()
     #print("MODE",Message.Ctr.WorkMode)
 
-
+    img = sensor.snapshot()#拍一张图像
     if(Message.Ctr.WorkMode==3):
-        sensor.set_windowing((0,0,utils.IMG_WIDTH,utils.IMG_HEIGHT))
-        img = sensor.snapshot()#拍一张图像
         find_start_point.find_start_point_blob(img)
     elif(Message.Ctr.WorkMode==4):
-        sensor.set_windowing((0,0,utils.IMG_WIDTH,utils.IMG_HEIGHT))
-        img = sensor.snapshot()#拍一张图像
         find_a.find_A_blob(img)
     elif(Message.Ctr.WorkMode==2):
-        sensor.set_windowing((40,30,80,60))
-        find_line.find_line()
+        find_line.LineCheck(img)
     elif(Message.Ctr.WorkMode==6):
         find_pole.check_pole()
     print("fps: ",clock.fps())
