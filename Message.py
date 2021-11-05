@@ -1,4 +1,3 @@
-#************************************ (C) COPYRIGHT 2019 ANO ***********************************#
 from pyb import UART #导入UART串口
 uart = UART(3,500000)#初始化串口 UART3波特率 500000
 
@@ -88,7 +87,7 @@ def ReceivePrepare(data):
             R.state = 0
             R.uart_buf=[]
     elif R.state==5:
-        if data==1 or data==2 or data==3 or data==4:
+        if data==0 or data==1 or data==2 or data==3 or data==4:
             R.uart_buf.append(data)
             R.state = 6
         else:
@@ -183,4 +182,3 @@ def UserDataPack(data0,data1,data2,data3,data4,data5,data6,data7,data8,data9):
     UserData[lens-1] = sum;
     return UserData
 
-#************************************ (C) COPYRIGHT 2019 ANO ***********************************#

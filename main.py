@@ -5,6 +5,8 @@ from pyb import LED,Timer
 import find_a,find_start_point,find_pole,utils,find_pole
 import find_code
 import Message
+import find_line
+
 
 #---------------------------镜头初始化---------------------------#
 #sensor.reset()
@@ -50,18 +52,19 @@ while(True):
     #读取串口数据更新接收体
     Message.UartReadBuffer()
     img = sensor.snapshot()#拍一张图像
-    print("MODE",Message.Ctr.WorkMode)
-    if(Message.Ctr.WorkMode==3):
-        find_start_point.find_start_point_blob(img)
-    elif(Message.Ctr.WorkMode==4):
-        find_a.find_A_blob(img)
-    #find_pole.find_pole(img)
-    #find_code.find_code(img)
-    #find_start_point.find_cirlce_method(img)
-    print("fps: ",clock.fps())
-    if Message.Ctr.IsDebug == 0:
-        fps=int(clock.fps())
-        Message.Ctr.T_ms = (int)(1000/fps)#1s内的帧数
+    find_line.LineCheck(img)
+    #print("MODE",Message.Ctr.WorkMode)
+    #if(Message.Ctr.WorkMode==3):
+        #find_start_point.find_start_point_blob(img)
+    #elif(Message.Ctr.WorkMode==4):
+        #find_a.find_A_blob(img)
+    ##find_pole.find_pole(img)
+    ##find_code.find_code(img)
+    ##find_start_point.find_cirlce_method(img)
+    #print("fps: ",clock.fps())
+    #if Message.Ctr.IsDebug == 0:
+        #fps=int(clock.fps())
+        #Message.Ctr.T_ms = (int)(1000/fps)#1s内的帧数
 
 
 

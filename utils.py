@@ -16,6 +16,8 @@ def CalculateIntersection(line1, line2):
     else:#没有交点
         return None
 
+
+
 '''计算两个直线的角度'''
 def calculate_angle(line1, line2):
     angle  = (180 - abs(line1.theta() - line2.theta()))
