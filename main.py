@@ -6,7 +6,8 @@ import find_a,find_start_point,find_pole,utils,find_pole
 import find_code
 import Message
 import find_line
-
+import video
+import mjpeg, pyb
 
 #---------------------------镜头初始化---------------------------#
 #sensor.reset()
@@ -46,31 +47,29 @@ sensor.skip_frames(time = 2000)
 #sensor.set_auto_exposure(False)
 clock = time.clock()#初始化时钟
 
+#VIDEO=mjpeg.Mjpeg("example.mjpeg")
+
+
 #主循环line_filter = LineFilter
 while(True):
     clock.tick()
     #读取串口数据更新接收体
     Message.UartReadBuffer()
     Message.Ctr.WorkMode=2
+    Message.Ctr.Shirk=1
     if(Message.Ctr.WorkMode==0):
         continue
 
-
-    #line =img.get_regression([(40, 82, -11, 6, -11, 24)],x_stride=2,y_stride=2,pixels_threshold=10,robust = True)
-    #if (line): img.draw_line(line.line(), color = 127)
-    #sensor.set_windowing((40,30,80,60))
-    #find_line.find_line()
-    #find_start_point.find_start_point_blob(img)
-    #find_a.find_A_blob(img)
-    #sensor.set_windowing((40,30,80,60))
-    #find_line.find_line()
-    #print("MODE",Message.Ctr.WorkMode)
+    print("MODE",Message.Ctr.WorkMode,"Shirk ",Message.Ctr.Shirk)
 
     img = sensor.snapshot()#拍一张图像
+    #VIDEO.add_frame(img)
     if(Message.Ctr.WorkMode==3):
         find_start_point.find_start_point_blob(img)
     elif(Message.Ctr.WorkMode==4):
         find_a.find_A_blob(img)
+        #fps=int(clock.fps())
+        #VIDEO.close(fps)
     elif(Message.Ctr.WorkMode==2):
         find_line.find_line()
     elif(Message.Ctr.WorkMode==6):

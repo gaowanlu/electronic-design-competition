@@ -1,21 +1,9 @@
 import sensor, image, time, math, struct
 import json
 import Message
+
 green_threshold = (44, 88, -31, -5, -9, 24)
 rad_to_angle = 57.29#弧度转度
-
-# 取样窗口
-# 根据分辨率修改！
-'''
-ROIS = {
-    'down':   (0, 105, 160, 15), # 横向取样-下方       1
-    'middle': (0, 52,  160, 15), # 横向取样-中间       2
-    'up':     (0,  0,  160, 15), # 横向取样-上方       3
-    'left':   (0,  0,  15, 120), # 纵向取样-左侧       4
-    'right':  (145,0,  15, 120), # 纵向取样-右侧       5
-    'All':    (0,  0,  160,120), # 全画面取样-全画面    6
-}
-'''
 
 class Line(object):
     flag = 0
@@ -101,14 +89,30 @@ def find_blobs_in_rois(img):
     '''
     IMG_WIDTH = img.width()
     IMG_HEIGHT = img.height()
-
-    ROIS = {
-        'UL':       (0, 0, 80, 30),
-        'UR':       (80, 0, 80, 30),
-        'middle':   (0, 50, int(IMG_WIDTH), int(IMG_HEIGHT/4)),
-        'down':     (0, int(3*IMG_HEIGHT/4), int(IMG_WIDTH), int(IMG_HEIGHT/4)),
-        # 'all':      (0,  0,  160,120),
+    #正常ROI
+    NORMAL_ROI = {
+        'UL':       (20, 20, 60, 20),
+        'UR':       (80, 20, 60, 20),
+        'middle':   (20, 50, 120,20 ),
+        'down':     (20, 80, 120, 20),
     }
+    NORMAL_ROI_UR_MIN_AREA=60*20*0.6
+    #mini ROI
+    MINI_ROI={
+        'UL':(40,30,40,15),
+        'UR':(80,30,40,15),
+        'middle':(40,55,80,15),
+        'down':(40,75,80,15)
+    }
+    MINI_ROI_UR_MIN_AREA=40*15*0.6
+
+    #根据状态字选择一种ROI模型
+    ROIS=NORMAL_ROI
+    ROIS_UR_MIN_AREA=NORMAL_ROI_UR_MIN_AREA
+    if(Message.Ctr.Shirk==1):
+        ROIS=MINI_ROI
+        ROIS_UR_MIN_AREA=MINI_ROI_UR_MIN_AREA
+
 
     roi_blobs_result = {}  # 在各个ROI中寻找色块的结果记录
     for roi_direct in ROIS.keys():  # 数值复位
@@ -133,7 +137,7 @@ def find_blobs_in_rois(img):
         # 取最大色块
         largest_blob = max(blobs, key=lambda b: b.pixels())  #lambda函数：匿名函数冒号前面是参数，冒号后面是返回的值
         #控制右上色块的大小
-        if(largest_blob==None or (largest_blob.area()<50*30 and roi_direct=='UR')):
+        if(largest_blob==None or (largest_blob.area()<ROIS_UR_MIN_AREA and roi_direct=='UR')):
             continue
         x,y,width,height = largest_blob[:4]
         print("max blob: ", largest_blob[:4])
@@ -195,10 +199,11 @@ def find_blobs_in_rois(img):
         #Line.angle = int(Line.angle)
     # 直走
     if Line.flag==1 and  roi_blobs_result['middle']['blob_flag'] and roi_blobs_result['down']['blob_flag']:
+        #控制2 3向右偏移阈值过大则向左移动一些
         Line.angle = math.atan((CX2-CX3)/(CY2-CY3))* rad_to_angle
         Line.angle = int(Line.angle)
-
-    elif roi_blobs_result['UL']['blob_flag']:
+    elif roi_blobs_result['UL']['blob_flag'] and roi_blobs_result['middle']['blob_flag']:
+        #控制2 向右偏移阈值过大则向左移动一些
         Line.angle = math.atan((CX1-CX2)/(CY1-CY2))* rad_to_angle
         Line.angle = int(Line.angle)
     else:
@@ -208,47 +213,13 @@ def find_blobs_in_rois(img):
         img.draw_string(0, 0, turn_type, color=(255,255,255))
         img.draw_string(int(IMG_WIDTH/8), 0, str(Line.angle), color=(255,255,255))
 
-    '''
-    #图像上显示检测到的直角类型
-    turn_type = 'N' # 啥转角也不是
-    if LineFlag.turn_left:
-        turn_type = 'L' # 左转
-    elif LineFlag.turn_right:
-        turn_type = 'R' # 右转
-    img.draw_string(0, 0, turn_type, color=(255,255,255))
-    #计算角度
-    CX1 = roi_blobs_result['up']['cx']
-    CX2 = roi_blobs_result['middle']['cx']
-    if  Line.flag:
-        Line.distance = CX2-80
-    else:
-        Line.distance = 0
-    CX3 = roi_blobs_result['down']['cx']
-    CY1 = roi_blobs_result['up']['cy']
-    CY2 = roi_blobs_result['middle']['cy']
-    CY3 = roi_blobs_result['down']['cy']
-    # 转弯
-    if LineFlag.turn_left or LineFlag.turn_right:
-        Line.angle = math.atan((CX2-CX3)/(CY2-CY3))* rad_to_angle
-        Line.angle = int(Line.angle)
-    # 直走
-    elif Line.flag==1 and (roi_blobs_result['down']['blob_flag'] and roi_blobs_result['up']['blob_flag'] ):
-        Line.angle = math.atan((CX1-CX3)/(CY1-CY3))* rad_to_angle
-        Line.angle = int(Line.angle)
-    # 结束转弯后
-    elif (not roi_blobs_result['down']['blob_flag'] ) and roi_blobs_result['up']['blob_flag']and ( roi_blobs_result['right']['blob_flag'] or roi_blobs_result['left']['blob_flag'])and roi_blobs_result['left']['blob_flag'] != roi_blobs_result['right']['blob_flag']:
-        Line.angle = math.atan((CX1-CX2)/(CY1-CY2))* rad_to_angle
-        Line.angle = int(Line.angle)
-    else:
-        Line.angle = 0
-    '''
+
 
 #线检测
 def find_line():
     # 拍摄图片
     img = sensor.snapshot()
     find_blobs_in_rois(img)
-    #print('交点坐标',Line.cross_x,-Line.cross_y, Line.cross_flag)
     #寻线数据打包发送
     Message.UartSendData(Message.LineDataPack(Line.flag,Line.angle,Line.distance,Line.cross_flag,Line.cross_x,Line.cross_y,Message.Ctr.T_ms))
     return Line.flag

@@ -15,6 +15,7 @@ class Ctrl(object):
     WorkMode = 0   #工作模式
     IsDebug = 1     #不为调试状态时关闭某些图形显示等，有利于提高运行速度
     T_ms = 0   #每秒有多少帧
+    Shirk=0 #窗口是否缩放
 
 #类的实例化
 Ctr=Ctrl()
@@ -40,6 +41,8 @@ def ReceiveAnl(data_buf,num):
     if data_buf[4]==0x06:
         #设置模块工作模式
         Ctr.WorkMode = data_buf[5]
+        #设置窗口是否缩放
+        Ctr.Shirk = data_buf[6]
 
 
 #-----------------------------------通信协议::接收解帧----------------------------------------#
@@ -94,9 +97,16 @@ def ReceivePrepare(data):
             R.state = 0
             R.uart_buf=[]
     elif R.state==6:
+        if data==0 or data==1:
+            R.uart_buf.append(data)
+            R.state=7
+        else:
+            R.state=0
+            R.uart_buf=[]
+    elif R.state==7:
         R.state = 0
         R.uart_buf.append(data)#
-        ReceiveAnl(R.uart_buf,7)
+        ReceiveAnl(R.uart_buf,8)
         R.uart_buf=[]#清空缓冲区，准备下次接收数据
     else:
         R.state = 0
