@@ -3,7 +3,9 @@ from pyb import LED,Timer
 import math
 import Message
 Green_threshold=(40, 82, -11, 6, -11, 24)
-A_threshold=(0, 21, -23, 10, -19, 25)
+A_threshold=(2, 38, -41, 15, -7, 49)
+#A 家 (0, 21, -23, 10, -19, 25)
+#A 场地 (2, 38, -41, 15, -7, 49)
 class ADot(object):
     flag = 0
     color = 0

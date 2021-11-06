@@ -2,7 +2,9 @@ import sensor, image, time, math, struct
 import json
 import Message
 
-green_threshold = (44, 88, -31, -5, -9, 24)
+green_threshold = (36, 75, -79, -36, -12, 55)
+#家 (22, 71, -46, -19, -7, 50)
+#场地 (36, 75, -79, -36, -12, 55)
 rad_to_angle = 57.29#弧度转度
 
 class Line(object):
@@ -199,11 +201,9 @@ def find_blobs_in_rois(img):
         #Line.angle = int(Line.angle)
     # 直走
     if Line.flag==1 and  roi_blobs_result['middle']['blob_flag'] and roi_blobs_result['down']['blob_flag']:
-        #控制2 3向右偏移阈值过大则向左移动一些
         Line.angle = math.atan((CX2-CX3)/(CY2-CY3))* rad_to_angle
         Line.angle = int(Line.angle)
-    elif roi_blobs_result['UL']['blob_flag'] and roi_blobs_result['middle']['blob_flag']:
-        #控制2 向右偏移阈值过大则向左移动一些
+    elif roi_blobs_result['UL']['blob_flag']:
         Line.angle = math.atan((CX1-CX2)/(CY1-CY2))* rad_to_angle
         Line.angle = int(Line.angle)
     else:

@@ -1,7 +1,9 @@
 import utils
 import Message
 
-startPoint_threshold =(0, 21, -17, 15, -31, 13)
+#家参数(0, 21, -17, 15, -31, 13)
+#场地参数(2, 26, -33, 16, -22, 31)
+startPoint_threshold =(2, 26, -33, 16, -22, 31)
 CROSS_MIN=10
 CROSS_MAX=90
 
