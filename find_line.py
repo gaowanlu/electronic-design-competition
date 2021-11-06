@@ -111,6 +111,10 @@ def find_blobs_in_rois(img):
     #根据状态字选择一种ROI模型
     ROIS=NORMAL_ROI
     ROIS_UR_MIN_AREA=NORMAL_ROI_UR_MIN_AREA
+    UR_LEAF_W=40
+    UR_LEAF_H=13
+
+
     if(Message.Ctr.Shirk==1):
         ROIS=MINI_ROI
         ROIS_UR_MIN_AREA=MINI_ROI_UR_MIN_AREA
@@ -139,7 +143,7 @@ def find_blobs_in_rois(img):
         # 取最大色块
         largest_blob = max(blobs, key=lambda b: b.pixels())  #lambda函数：匿名函数冒号前面是参数，冒号后面是返回的值
         #控制右上色块的大小
-        if(largest_blob==None or (largest_blob.area()<ROIS_UR_MIN_AREA and roi_direct=='UR')):
+        if(largest_blob==None or ((largest_blob.w()<UR_LEAF_W or largest_blob.h()<UR_LEAF_H) and roi_direct=='UR')):
             continue
         x,y,width,height = largest_blob[:4]
         print("max blob: ", largest_blob[:4])

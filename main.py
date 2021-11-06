@@ -42,9 +42,9 @@ sensor.set_auto_whitebal(False)#若想追踪颜色则关闭白平衡
 #sensor.set_auto_exposure(True, exposure_us=5000) # 设置自动曝光，exposure_us=为设置的曝光参数
 # 这里的参数配置 QQVGA + exposure=5000 为官方推荐的高帧率模式
 # sensor.get_exposure_us()获得此时的曝光参数 如不采用自动曝光 可以采用 int(sensor.get_exposure_us()*scale)
-sensor.skip_frames(time = 2000)
-#sensor.set_auto_gain(False)
-#sensor.set_auto_exposure(False)
+sensor.set_auto_gain(False)
+sensor.set_auto_exposure(False)
+sensor.skip_frames(time = 3000)
 clock = time.clock()#初始化时钟
 
 #VIDEO=mjpeg.Mjpeg("example.mjpeg")
@@ -55,6 +55,8 @@ while(True):
     clock.tick()
     #读取串口数据更新接收体
     Message.UartReadBuffer()
+    Message.Ctr.WorkMode=4
+    #Message.Ctr.Shirk=1
     if(Message.Ctr.WorkMode==0):
         continue
 

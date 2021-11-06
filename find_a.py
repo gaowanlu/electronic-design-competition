@@ -2,10 +2,10 @@ import utils
 from pyb import LED,Timer
 import math
 import Message
-Green_threshold=(40, 82, -11, 6, -11, 24)
-A_threshold=(2, 38, -41, 15, -7, 49)
+Green_threshold=(36, 75, -79, -36, -12, 55)
+A_threshold=(0, 36, -59, 8, -8, 74)
 #A 家 (0, 21, -23, 10, -19, 25)
-#A 场地 (2, 38, -41, 15, -7, 49)
+#A 场地 (13, 40, -36, 4, 5, 38)
 class ADot(object):
     flag = 0
     color = 0
@@ -16,17 +16,11 @@ ADOT=ADot()
 '''寻找A字'''
 def find_A_blob(img):
     ADOT.flag=0;#重置没有找到
-    ROI=utils.find_maxSizeBlob_byThreshold(img,Green_threshold)
-    if(ROI==None):
-        sendMessage()
-        return None
-    else:
-        ROI=ROI.rect()
-    blobs = img.find_blobs([A_threshold], pixels_threshold=3, area_threshold=3, merge=True, margin=5)
+    blobs = img.find_blobs([A_threshold], merge=True)
     result=None
     #4.3  4.8 0.895   short/long
     #62 69  27 29
-    last_sub=4.0
+    last_sub=100.0
     for blob in blobs:
         width=blob.w()
         height=blob.h()
@@ -34,10 +28,10 @@ def find_A_blob(img):
         long_side=width if width>height else height
         rate=short_side/long_side
         #print("A",width,height,rate)
-        sub=math.fabs(0.956-rate)
-        side_limit=short_side>10 and short_side<68
-        side_limit=side_limit and long_side>17 and long_side<68#and side_limit
-        #if(sub<last_sub and side_limit and find_AShape(img,blob)):
+        #sub=math.fabs(0.7407-rate)
+        side_limit=short_side>8 and short_side<68
+        side_limit=side_limit and long_side>13 and long_side<68#and side_limit
+        #if(sub<last_sub and side_limit and and find_AShape(img,blob) ):
         if(side_limit):
             #last_sub=sub
             result=blob
