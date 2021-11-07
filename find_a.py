@@ -3,7 +3,7 @@ from pyb import LED,Timer
 import math
 import Message
 Green_threshold=(36, 75, -79, -36, -12, 55)
-A_threshold=(0, 36, -59, 8, -8, 74)
+A_threshold=(0, 30, -47, 0, 0, 39)
 #A 家 (0, 21, -23, 10, -19, 25)
 #A 场地 (13, 40, -36, 4, 5, 38)
 class ADot(object):
@@ -21,19 +21,22 @@ def find_A_blob(img):
     #4.3  4.8 0.895   short/long
     #62 69  27 29
     last_sub=100.0
+    max_blob=-100
     for blob in blobs:
         width=blob.w()
         height=blob.h()
         short_side=width if width<height else height
         long_side=width if width>height else height
         rate=short_side/long_side
+        area=short_side*long_side
         #print("A",width,height,rate)
         #sub=math.fabs(0.7407-rate)
         side_limit=short_side>8 and short_side<68
         side_limit=side_limit and long_side>13 and long_side<68#and side_limit
         #if(sub<last_sub and side_limit and and find_AShape(img,blob) ):
-        if(side_limit):
+        if(side_limit and area>max_blob):
             #last_sub=sub
+            max_blob=area
             result=blob
         #utils.draw_blob(img,blob)
     if result!=None:

@@ -2,7 +2,7 @@ import sensor, image, time, math, struct
 import json
 import Message
 
-green_threshold = (36, 75, -79, -36, -12, 55)
+green_threshold = (40, 73, -47, -19, 0, 34)
 #家 (22, 71, -46, -19, -7, 50)
 #场地 (36, 75, -79, -36, -12, 55)
 rad_to_angle = 57.29#弧度转度
@@ -111,7 +111,7 @@ def find_blobs_in_rois(img):
     #根据状态字选择一种ROI模型
     ROIS=NORMAL_ROI
     ROIS_UR_MIN_AREA=NORMAL_ROI_UR_MIN_AREA
-    UR_LEAF_W=40
+    UR_LEAF_W=45
     UR_LEAF_H=13
 
 
@@ -141,7 +141,8 @@ def find_blobs_in_rois(img):
         if len(blobs) == 0:
             continue
         # 取最大色块
-        largest_blob = max(blobs, key=lambda b: b.pixels())  #lambda函数：匿名函数冒号前面是参数，冒号后面是返回的值
+        #largest_blob = max(blobs, key=lambda b: b.pixels())  #lambda函数：匿名函数冒号前面是参数，冒号后面是返回的值
+        largest_blob = min(blobs, key=lambda b: b.x())  #lambda函数：匿名函数冒号前面是参数，冒号后面是返回的值
         #控制右上色块的大小
         if(largest_blob==None or ((largest_blob.w()<UR_LEAF_W or largest_blob.h()<UR_LEAF_H) and roi_direct=='UR')):
             continue
