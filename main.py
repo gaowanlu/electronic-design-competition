@@ -55,7 +55,7 @@ while(True):
     clock.tick()
     #读取串口数据更新接收体
     Message.UartReadBuffer()
-    #Message.Ctr.WorkMode=4
+    #Message.Ctr.WorkMode=2
 
     #Message.Ctr.Shirk=1
     if(Message.Ctr.WorkMode==0):

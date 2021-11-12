@@ -90,7 +90,7 @@ def ReceivePrepare(data):
             R.state = 0
             R.uart_buf=[]
     elif R.state==5:
-        if data==0 or data==1 or data==2 or data==3 or data==4 or data==5:
+        if data==0 or data==1 or data==2 or data==3 or data==4 or data==5 or data==6:
             R.uart_buf.append(data)
             R.state = 6
         else:
@@ -131,9 +131,9 @@ def UartReadBuffer():
 #-----------------------------------通信协议::打包帧----------------------------------------#
 
 #点检测数据打包
+#发送扫码信息
 def DotDataPack(color,flag,x,y,T_ms,mode_flag):
-    if(flag==1):
-        print("found: x=",x,"  y=",-y)
+    print("send dot data flag :",flag," mode_flag: ",mode_flag)
     pack_data=bytearray([0xAA,0x29,0x05,mode_flag,0x00,color,flag,x>>8,x,(-y)>>8,(-y),T_ms,0x00])
     lens = len(pack_data)#数据包大小
     pack_data[4] = 7;#有效数据个数
@@ -145,6 +145,11 @@ def DotDataPack(color,flag,x,y,T_ms,mode_flag):
         i = i+1
     pack_data[lens-1] = sum;
     return pack_data
+
+
+
+
+
 
 #线检测数据打包
 def LineDataPack(flag,angle,distance,crossflag,crossx,crossy,T_ms):

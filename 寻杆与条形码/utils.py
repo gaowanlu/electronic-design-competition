@@ -1,5 +1,5 @@
-IMG_WIDTH = 320
-IMG_HEIGHT = 240
+IMG_WIDTH = 160
+IMG_HEIGHT = 120
 # 计算两直线的交点
 def CalculateIntersection(line1, line2):
     a1 = line1.y2() - line1.y1()

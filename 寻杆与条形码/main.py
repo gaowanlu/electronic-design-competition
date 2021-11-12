@@ -10,15 +10,15 @@ import video
 import mjpeg, pyb
 
 #---------------------------镜头初始化---------------------------#
-#sensor.reset()
-#sensor.set_pixformat(sensor.RGB565)#设置相机模块的像素模式
-#sensor.set_framesize(sensor.QQVGA)#设置相机分辨率
+sensor.reset()
+sensor.set_pixformat(sensor.RGB565)#设置相机模块的像素模式
+sensor.set_framesize(sensor.QQVGA)#设置相机分辨率
 #sensor.skip_frames(time=3000)#时钟
 #sensor.set_auto_whitebal(False)#若想追踪颜色则关闭白平衡
 #clock = time.clock()#初始化时钟
 #初始化镜头
-sensor.reset()#清除掉之前摄像头存在的代码对于图片的设置
-sensor.set_pixformat(sensor.RGB565)#设置相机模块的像素模式
+#sensor.reset()#清除掉之前摄像头存在的代码对于图片的设置
+#0sensor.set_pixformat(sensor.RGB565)#设置相机模块的像素模式
 #565说明存储RGB三个通道
 #每个通道存储像素值所对应的二进制位分别是5，6，5
 #RGB565与RGB比较
@@ -26,7 +26,11 @@ sensor.set_pixformat(sensor.RGB565)#设置相机模块的像素模式
 #R      10101   10101000    左移三位
 #G      100010  10001000    左移两位
 #B      00101   00101000    左移三位
-sensor.set_framesize(sensor.QVGA)#设置相机分辨率160*120
+#sensor.set_framesize(sensor.QQVGA)#设置相机分辨率160*120
+
+#sensor.set_framesize(sensor.VGA)
+#sensor.set_pixformat(sensor.GRAYSCALE)
+
 #预设大小   窗口宽度    窗口高度
 #VGA        640         480
 #QVGA       320         240
@@ -62,7 +66,7 @@ while(True):
 
     print("MODE",Message.Ctr.WorkMode,"Shirk ",Message.Ctr.Shirk)
 
-    img = sensor.snapshot()#拍一张图像
+    #img = sensor.snapshot()#拍一张图像
     #VIDEO.add_frame(img)
     if(Message.Ctr.WorkMode==3):
         find_start_point.find_start_point_blob(img)
@@ -73,13 +77,18 @@ while(True):
     elif(Message.Ctr.WorkMode==2):
         find_line.find_line()
     elif(Message.Ctr.WorkMode==5):
+        sensor.set_framesize(sensor.QQVGA)
+        sensor.set_pixformat(sensor.RGB565)
         find_pole.check_pole()
-    print("fps: ",clock.fps()
-
-    )
+    elif(Message.Ctr.WorkMode==6):
+        sensor.set_framesize(sensor.VGA)
+        sensor.set_pixformat(sensor.GRAYSCALE)
+        find_code.find_code()
+    print("fps: ",clock.fps())
     if Message.Ctr.IsDebug == 0:
         fps=int(clock.fps())
         Message.Ctr.T_ms = (int)(1000/fps)#1s内的帧数
+
 
 
 
