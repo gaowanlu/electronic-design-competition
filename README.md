@@ -20,7 +20,8 @@ email:  2209120827@qq.com  | heizuboriyo@gmail.com
 
 ### 视觉ROI模型建立
 ROI模型图如 图表3所示，本项目采用视觉图像大小为 160*120（即宽为 160像素 高为120像素）。在图像中设计四个ROI区域，
-![在这里插入图片描述](https://img-blog.csdnimg.cn/f2a33bd1eb9c441b878832c97412ae71.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAd2FubHVOMQ==,size_20,color_FFFFFF,t_70,g_se,x_16)
+<div align=center><img width="450"  src="https://img-blog.csdnimg.cn/f2a33bd1eb9c441b878832c97412ae71.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAd2FubHVOMQ==,size_20,color_FFFFFF,t_70,g_se,x_16"/></div>
+
 
  
 图表 3 ROI模型
@@ -31,30 +32,33 @@ ROI模型图如 图表3所示，本项目采用视觉图像大小为 160*120（�
 
 ### 利用ROI模型设计识别算法  
 当右上区域的内绿色色块的高大于右上区域高的二分之一，与宽度大于右上区域宽的三分之二时，则应向右转。因为项目方案为逆时针方案旋转，所以只能遇到如图中的一种右转情况。
+<div align=center><img width="450"  src="https://img-blog.csdnimg.cn/6c2e07f44df64b2d85e6fd2e1b742877.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAd2FubHVOMQ==,size_20,color_FFFFFF,t_70,g_se,x_16"/></div>
 
- ![在这里插入图片描述](https://img-blog.csdnimg.cn/6c2e07f44df64b2d85e6fd2e1b742877.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAd2FubHVOMQ==,size_20,color_FFFFFF,t_70,g_se,x_16)
 
 图表 4 右转情况 注(阴影区域为绿色)
 
 
 当只有中间区域与底部区域内具有绿色色块时，无人机应该向左转(注：逆时针绕行地图情况)。
- ![在这里插入图片描述](https://img-blog.csdnimg.cn/af2420a969d240408affac77caddb148.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAd2FubHVOMQ==,size_20,color_FFFFFF,t_70,g_se,x_16)
+<div align=center><img width="450"  src="https://img-blog.csdnimg.cn/af2420a969d240408affac77caddb148.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAd2FubHVOMQ==,size_20,color_FFFFFF,t_70,g_se,x_16"/></div>
+
 
 图表 5 ROI模型 左转情况 注(阴影区域为绿色)
   
  
 当只有中间区域与底部区域、左上区域具有色块与右上区域不满足右转条件时，无人机应该直行。
- ![在这里插入图片描述](https://img-blog.csdnimg.cn/5afca08f245742058accbc55400ac143.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAd2FubHVOMQ==,size_19,color_FFFFFF,t_70,g_se,x_16)
+<div align=center><img width="450"  src="https://img-blog.csdnimg.cn/5afca08f245742058accbc55400ac143.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAd2FubHVOMQ==,size_19,color_FFFFFF,t_70,g_se,x_16"/></div>
+
 
 图表 6  ROI模型 直行情况 注(阴影区域为绿色)
 
 无人机在直行中利用视觉数据 a角度与distance 距离偏差 进行姿态校正，沿边飞行。
- ![在这里插入图片描述](https://img-blog.csdnimg.cn/8479dbe710ad4b8a95973403a023fc03.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAd2FubHVOMQ==,size_19,color_FFFFFF,t_70,g_se,x_16)
+<div align=center><img width="450"  src="https://img-blog.csdnimg.cn/8479dbe710ad4b8a95973403a023fc03.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAd2FubHVOMQ==,size_19,color_FFFFFF,t_70,g_se,x_16"/></div>
+
 
 图表 7 ROI模型 直行情况 注(阴影区域为绿色)
 寻找“A”字体机器视觉解决方案：
+<div align=center><img width="450"  src="https://img-blog.csdnimg.cn/3b80b9dc7930442cad4050537329fcd4.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAd2FubHVOMQ==,size_13,color_FFFFFF,t_70,g_se,x_16"/></div>
 
- ![在这里插入图片描述](https://img-blog.csdnimg.cn/3b80b9dc7930442cad4050537329fcd4.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAd2FubHVOMQ==,size_13,color_FFFFFF,t_70,g_se,x_16)
 
 图表 8  ROI模型 寻找A 注(阴影区域为绿色)
 	
@@ -65,14 +69,16 @@ ROI模型图如 图表3所示，本项目采用视觉图像大小为 160*120（�
 
 
 寻找“停机坪”机器视觉解决方案：
- ![在这里插入图片描述](https://img-blog.csdnimg.cn/c008206d58214e8b98becdd239e2af37.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAd2FubHVOMQ==,size_16,color_FFFFFF,t_70,g_se,x_16)
+<div align=center><img width="450"  src="https://img-blog.csdnimg.cn/c008206d58214e8b98becdd239e2af37.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAd2FubHVOMQ==,size_16,color_FFFFFF,t_70,g_se,x_16"/></div>
+
 
 图表 9  停机坪
 与“A”字体识别方案类似，当无人机到达停机坪附近时下位机通过串口通信通知OpenMV,首先在相机视野中寻找最大的黑色轮廓区域(在地图中停机坪的背景色为白色，利用LAB进行阈值调整为二值图，只留下黑色区域)。在图中ROI区域内使用霍夫直线检测算法查找是否有两条直线在图像坐标系下具有交点，且二者的夹角类似于90度。通过以上筛选范围将两直线的交点发送至下位机，有嵌入式程序进行无人机的姿态调整。
 
 
 寻找黑色杆与识别条形码机器视觉解决方案：
-![在这里插入图片描述](https://img-blog.csdnimg.cn/b894cb4d4e9d419f9ff005d6a1e8b2f4.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAd2FubHVOMQ==,size_20,color_FFFFFF,t_70,g_se,x_16)
+<div align=center><img width="450"  src="https://img-blog.csdnimg.cn/b894cb4d4e9d419f9ff005d6a1e8b2f4.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAd2FubHVOMQ==,size_20,color_FFFFFF,t_70,g_se,x_16"/></div>
+
 
  
 图表 10  识别黑色杆与条形码
@@ -83,11 +89,15 @@ ROI模型图如 图表3所示，本项目采用视觉图像大小为 160*120（�
 
 
 ## 赛题详情  
-![在这里插入图片描述](https://img-blog.csdnimg.cn/5b54da5f961e42a18a591d5ce8a1177d.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAd2FubHVOMQ==,size_20,color_FFFFFF,t_70,g_se,x_16)
-![在这里插入图片描述](https://img-blog.csdnimg.cn/c737a9c3df9c4643aeaa95cbbb02ee14.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAd2FubHVOMQ==,size_20,color_FFFFFF,t_70,g_se,x_16)
-![在这里插入图片描述](https://img-blog.csdnimg.cn/b5650e31980f455981853659799d613b.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAd2FubHVOMQ==,size_20,color_FFFFFF,t_70,g_se,x_16)
+<div align=center><img width="650"  src="https://img-blog.csdnimg.cn/5b54da5f961e42a18a591d5ce8a1177d.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAd2FubHVOMQ==,size_20,color_FFFFFF,t_70,g_se,x_16"/></div>
 
-![在这里插入图片描述](https://img-blog.csdnimg.cn/b2a83848b4614f088fa2aa61e4017c1e.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAd2FubHVOMQ==,size_20,color_FFFFFF,t_70,g_se,x_16)
-![在这里插入图片描述](https://img-blog.csdnimg.cn/e3501fe826cd43bc84953d298ffa7155.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAd2FubHVOMQ==,size_20,color_FFFFFF,t_70,g_se,x_16)
+<div align=center><img width="650"  src="https://img-blog.csdnimg.cn/c737a9c3df9c4643aeaa95cbbb02ee14.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAd2FubHVOMQ==,size_20,color_FFFFFF,t_70,g_se,x_16"/></div>
 
-![在这里插入图片描述](https://img-blog.csdnimg.cn/4c11badf0d2e4dde91d781c6d959b8bc.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAd2FubHVOMQ==,size_20,color_FFFFFF,t_70,g_se,x_16)
+<div align=center><img width="650"  src="https://img-blog.csdnimg.cn/b5650e31980f455981853659799d613b.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAd2FubHVOMQ==,size_20,color_FFFFFF,t_70,g_se,x_16"/></div>
+
+<div align=center><img width="650"  src="https://img-blog.csdnimg.cn/b2a83848b4614f088fa2aa61e4017c1e.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAd2FubHVOMQ==,size_20,color_FFFFFF,t_70,g_se,x_16"/></div>
+
+<div align=center><img width="650"  src="https://img-blog.csdnimg.cn/e3501fe826cd43bc84953d298ffa7155.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAd2FubHVOMQ==,size_20,color_FFFFFF,t_70,g_se,x_16"/></div>
+
+<div align=center><img width="650"  src="https://img-blog.csdnimg.cn/4c11badf0d2e4dde91d781c6d959b8bc.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAd2FubHVOMQ==,size_20,color_FFFFFF,t_70,g_se,x_16"/></div>
+
